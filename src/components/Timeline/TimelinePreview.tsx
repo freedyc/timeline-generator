@@ -26,7 +26,7 @@ export default function TimelinePreview() {
   };
 
   return (
-    <div className="p-8 min-h-full">
+    <div id="timeline-preview-content" className="p-8 min-h-full">
       {/* Title */}
       {config.title && (
         <div className="text-center mb-8">
