@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  }
+}
+
+@layer components {
+  .timeline-container {
+    @apply relative p-8;
+  }
+
+  .event-card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 transition-all duration-200 hover:shadow-md;
+  }
+
+  .event-dot {
+    @apply w-4 h-4 rounded-full border-2 border-white dark:border-gray-900 shadow-md flex-shrink-0;
+  }
+
+  .timeline-line {
+    @apply bg-gray-200 dark:bg-gray-700;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors duration-150 flex items-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition-colors duration-150 flex items-center gap-2;
+  }
+
+  .btn-danger {
+    @apply px-3 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg text-sm font-medium transition-colors duration-150;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-150;
+  }
+
+  .label {
+    @apply block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1;
+  }
+
+  .sidebar-section {
+    @apply border-b border-gray-100 dark:border-gray-700 pb-4 mb-4 last:border-0 last:mb-0;
+  }
+}
+
+/* Horizontal timeline scroll */
+.horizontal-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+
+/* Animation delay utilities */
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-700 { animation-delay: 0.7s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+
+/* Opacity 0 for animated elements before they play */
+.animate-fade-in,
+.animate-slide-in-left,
+.animate-slide-in-right,
+.animate-bounce-in {
+  opacity: 0;
+}
