@@ -10,19 +10,68 @@ export default function ExportPanel() {
 
   const getPreviewElement = () => document.getElementById('timeline-preview-content');
 
+  const captureCanvas = async (el: HTMLElement) => {
+    // Clone the element to avoid layout issues during capture
+    const clone = el.cloneNode(true) as HTMLElement;
+    const isDark = document.documentElement.classList.contains('dark');
+
+    // Copy all computed styles to the clone and its children
+    const copyStyles = (source: Element, target: Element) => {
+      const computed = window.getComputedStyle(source);
+      const targetEl = target as HTMLElement;
+      targetEl.style.cssText = computed.cssText;
+      // Ensure dimensions are explicit
+      targetEl.style.width = source.scrollWidth + 'px';
+      targetEl.style.height = source.scrollHeight + 'px';
+      targetEl.style.overflow = 'visible';
+      targetEl.style.position = 'static';
+
+      const sourceChildren = source.children;
+      const targetChildren = target.children;
+      for (let i = 0; i < sourceChildren.length; i++) {
+        if (targetChildren[i]) {
+          copyStyles(sourceChildren[i], targetChildren[i]);
+        }
+      }
+    };
+
+    copyStyles(el, clone);
+    clone.style.position = 'absolute';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    document.body.appendChild(clone);
+
+    try {
+      const canvas = await html2canvas(clone, {
+        backgroundColor: isDark ? '#030712' : '#f9fafb',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        width: el.scrollWidth,
+        height: el.scrollHeight,
+        windowWidth: el.scrollWidth,
+        windowHeight: el.scrollHeight,
+        onclone: (doc) => {
+          // Ensure dark mode class is preserved
+          if (isDark) {
+            doc.documentElement.classList.add('dark');
+          }
+        },
+      });
+      return canvas;
+    } finally {
+      document.body.removeChild(clone);
+    }
+  };
+
   const exportPNG = async () => {
     const el = getPreviewElement();
     if (!el) return;
     setExporting(true);
     setOpen(false);
     try {
-      const canvas = await html2canvas(el, {
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#030712' : '#f9fafb',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-      });
+      const canvas = await captureCanvas(el);
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = url;
@@ -41,13 +90,7 @@ export default function ExportPanel() {
     setExporting(true);
     setOpen(false);
     try {
-      const canvas = await html2canvas(el, {
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#030712' : '#f9fafb',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-      });
+      const canvas = await captureCanvas(el);
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
